@@ -1,0 +1,64 @@
+schema_version: 1
+name: __NAME__
+version: 0.1.0
+family: optimisation
+summary: __SUMMARY__
+license: Apache-2.0
+tags: [qubo, optimisation, qiskit, qaoa]
+
+inputs:
+  schema: schemas/input.json
+  examples: [examples/qubo_5.json]
+parameters:
+  - {name: layers, label: Circuit depth, type: int, default: 2, min: 1, max: 6, description: "QAOA layers: more can find better answers but train longer"}
+  - {name: shots, label: Final shots, type: int, default: 4000, min: 100, max: 20000, description: Shots for the final sampling}
+  - {name: optimizer_iters, label: Optimiser iterations, type: int, default: 60, min: 5, max: 300, description: "Training steps (noise-free, on the statevector)"}
+outputs:
+  schema: schemas/output.json
+
+# The class that implements the methods below. It is plain Qiskit.
+entrypoint: src.workflow:Qubo
+
+# What a person sees. The platform shows this text and measures every number itself.
+category: Optimisation
+objective: {label: QUBO value, unit: "", decimals: 4}
+metric:
+  kind: relative_gap        # relative_gap | relative_error | error_rate
+  note: "100% means the quantum objective equals the best classical objective."
+methods:                    # implemented by the class: quantum(), reference(), classical_<id>()
+  - id: qaoa
+    role: quantum
+    title: QAOA (quantum approximate optimisation)
+    what: A short quantum circuit that alternates between favouring low-cost answers and mixing possibilities. Its angles are tuned on a simulator, then the final answers are measured.
+    strength: Samples good answers directly from a quantum state.
+    limit: On today's noisy chips only small circuits stay faithful.
+  - id: exhaustive
+    role: reference
+    title: Exhaustive search
+    what: Tries every possible answer and keeps the best one.
+    strength: Guaranteed to find the best answer.
+    limit: Only practical up to about 20 variables.
+  - id: annealing
+    role: classical
+    title: Simulated annealing
+    what: Starts from a random answer and keeps trying small changes, sometimes accepting a worse one early on to escape dead ends.
+    strength: Fast, and usually lands close to the best answer.
+    limit: No guarantee that it finds the best answer.
+
+envelope:
+  max_qubits: 12
+  max_variables: 12
+  notes: "Up to 12 binary variables per run"
+
+targets:
+  simulators: [cpu, gpu]
+  qpu: [ibm]
+
+resources:
+  timeout_s: 1800
+  memory_mb: 2048
+  network: none
+
+runtime:
+  python: "3.12"
+  dependencies: requirements.lock

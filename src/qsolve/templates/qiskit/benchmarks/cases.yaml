@@ -1,0 +1,17 @@
+cases:
+  - name: unconstrained-5
+    input_file: examples/qubo_5.json
+    seed: 1
+    expect: {max_gap: 0.0}
+  - name: dense-random-8
+    input:
+      Q: [[-1.2,0.8,-0.3,0.5,0.1,-0.7,0.2,0.4],[0.8,0.6,0.9,-0.4,0.3,0.2,-0.5,0.1],[-0.3,0.9,-0.8,0.2,-0.6,0.4,0.3,-0.2],[0.5,-0.4,0.2,1.1,0.7,-0.3,0.6,-0.9],[0.1,0.3,-0.6,0.7,-1.5,0.2,-0.4,0.5],[-0.7,0.2,0.4,-0.3,0.2,0.9,0.1,-0.6],[0.2,-0.5,0.3,0.6,-0.4,0.1,-1.0,0.3],[0.4,0.1,-0.2,-0.9,0.5,-0.6,0.3,0.7]]
+    seed: 3
+    expect: {max_gap: 0.0}
+  # The same small case on a device's noise model (free): validates error mitigation, which only
+  # means something where there is noise. Set the bounds to what your circuit measurably reaches.
+  - name: noise-model-qubo-5
+    input_file: examples/qubo_5.json
+    target: fake:fez@1.6
+    seed: 1
+    expect: {max_gap: 0.0, min_fidelity: 0.9, max_two_qubit_gates: 60}
