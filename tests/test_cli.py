@@ -31,7 +31,10 @@ def test_init_writes_a_complete_workflow(scaffold: Path) -> None:
 
 def test_scaffold_lints_clean_and_ships_the_sdk_license(scaffold: Path) -> None:
     # a new author's first `qsolve lint .` must not warn about a missing LICENSE
-    assert (scaffold / "LICENSE").read_bytes() == (ROOT / "LICENSE").read_bytes()
+    # read_text normalises line endings: a Windows checkout may rewrite one copy as CRLF
+    assert (scaffold / "LICENSE").read_text(encoding="utf-8") == (ROOT / "LICENSE").read_text(
+        encoding="utf-8"
+    )
     result = runner.invoke(app, ["lint", str(scaffold)])
     assert result.exit_code == 0 and "No problems found" in result.output, result.output
 
@@ -46,7 +49,8 @@ def test_init_rejects_names_that_are_not_lowercase_dashes(tmp_path: Path, bad: s
 def test_init_never_overwrites_an_existing_folder(tmp_path: Path) -> None:
     (tmp_path / "taken").mkdir()
     result = runner.invoke(app, ["init", "taken", "--directory", str(tmp_path)])
-    assert result.exit_code == 1 and "already exists" in result.output
+    # Rich wraps long paths at the terminal width, so compare with whitespace collapsed
+    assert result.exit_code == 1 and "already exists" in " ".join(result.output.split())
 
 
 def test_the_scaffold_validates_and_lints_clean(scaffold: Path) -> None:
