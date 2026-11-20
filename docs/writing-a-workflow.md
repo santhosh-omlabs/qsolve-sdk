@@ -11,7 +11,7 @@ cd warehouse-picker
 qsolve check .         # validate, lint and test: it already passes every stage
 ```
 
-The scaffold solves a small QUBO with QAOA in about 120 lines of Qiskit. Read `src/workflow.py` first.
+The scaffold solves a small QUBO with QAOA in about 150 lines of Qiskit. Read `src/workflow.py` first.
 
 ## 2. Model your problem (`__init__`, `size`, `evaluate`)
 

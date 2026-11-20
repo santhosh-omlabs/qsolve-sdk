@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.1 - 2026-11-20
+
+- The scaffold README linked the schema rules at a page that does not exist; it now links
+  [Input and output schemas](https://qsolve.omlabs.co/docs/build/input-and-output-schemas).
+- Every version tag now gets a GitHub Release, with its changelog section as the notes.
+
 ## 1.1.0 - 2026-11-20
 
 - `qsolve check`: validate, lint and test in the order the platform runs them, stopping at the
