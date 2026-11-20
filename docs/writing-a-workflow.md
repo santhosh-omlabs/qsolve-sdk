@@ -66,7 +66,7 @@ standard (chemical accuracy, say).
 qsolve validate . && qsolve lint . && qsolve test .
 ```
 
-Push to a public repository and submit it on the Qsolve platform.
+Push to a public repository and submit it on the [Qsolve platform](https://qsolve.omlabs.co).
 
 ## Hardware realities
 

@@ -11,6 +11,7 @@ from typer.testing import CliRunner
 from qsolve.cli import _json_or_text, app
 
 runner = CliRunner()
+ROOT = Path(__file__).resolve().parents[1]
 
 
 @pytest.fixture(scope="module")
@@ -26,6 +27,13 @@ def test_init_writes_a_complete_workflow(scaffold: Path) -> None:
         assert (scaffold / name).is_file(), name
     assert "my-problem" in (scaffold / "qsolve.yaml").read_text(encoding="utf-8")
     assert "__NAME__" not in (scaffold / "qsolve.yaml").read_text(encoding="utf-8")
+
+
+def test_scaffold_lints_clean_and_ships_the_sdk_license(scaffold: Path) -> None:
+    # a new author's first `qsolve lint .` must not warn about a missing LICENSE
+    assert (scaffold / "LICENSE").read_bytes() == (ROOT / "LICENSE").read_bytes()
+    result = runner.invoke(app, ["lint", str(scaffold)])
+    assert result.exit_code == 0 and "No problems found" in result.output, result.output
 
 
 @pytest.mark.parametrize("bad", ["A", "Upper-Case", "has space", "-leading-dash", "x"])

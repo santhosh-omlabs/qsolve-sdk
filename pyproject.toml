@@ -31,6 +31,13 @@ dependencies = [
     "qiskit-aer>=0.17",
 ]
 
+[project.urls]
+Homepage = "https://qsolve.omlabs.co"
+Documentation = "https://qsolve.omlabs.co/docs/build/overview"
+Repository = "https://github.com/santhosh-omlabs/qsolve-sdk"
+Issues = "https://github.com/santhosh-omlabs/qsolve-sdk/issues"
+Changelog = "https://github.com/santhosh-omlabs/qsolve-sdk/blob/main/CHANGELOG.md"
+
 [project.optional-dependencies]
 ibm = ["qiskit-ibm-runtime>=0.40"]
 dev = ["pytest>=8.0", "ruff>=0.5", "mypy>=1.10", "types-PyYAML", "types-jsonschema"]

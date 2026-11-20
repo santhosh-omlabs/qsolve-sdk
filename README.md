@@ -1,7 +1,8 @@
 # qsolve-sdk
 
-The bridge between a Qiskit workflow and the Qsolve platform. Qsolve is a platform where researchers
-find, benchmark and run quantum and hybrid workflows, judged against the best classical method.
+The bridge between a Qiskit workflow and the [Qsolve](https://qsolve.omlabs.co) platform. Qsolve is
+a platform where researchers find, benchmark and run quantum and hybrid workflows, judged against
+the best classical method. [Documentation](https://qsolve.omlabs.co/docs/build/overview).
 
 You write a workflow in plain Qiskit: your circuits, your algorithm, your error mitigation, your
 classical references. This SDK runs it on Qsolve's backends (CPU, GPU, QPU), records every circuit it
@@ -21,7 +22,8 @@ pip install qsolve-sdk
 pip install "qsolve-sdk[ibm]"    # + the IBM runtime: device noise models and IBM hardware
 ```
 
-Python 3.12 or newer, Qiskit 2.x. Install the `ibm` extra even if you never touch hardware: the
+Python 3.12 or newer (the version the Qsolve sandbox runs, so what passes here runs there), Qiskit
+2.x. Install the `ibm` extra even if you never touch hardware: the
 `fake:<device>` noise-model targets, and the noise-model case in the scaffold's benchmarks, need it.
 Running on a real IBM device additionally needs your own token in the `QSOLVE_IBM_TOKEN`
 environment variable (optional `QSOLVE_IBM_INSTANCE`). `qsolve --version` prints the installed
@@ -101,14 +103,14 @@ modules (`qsolve.backends`, `qsolve.metering`, `qsolve.benchmark`, `qsolve.lint`
 documented and importable but may change in a minor version. The executor protocol
 (`qsolve.backends.remote`), `qsolve.sandbox_entry` and every underscore-prefixed name are internal
 and may change in any release. Every public name,
-with signatures, parameters and examples, is in the SDK reference of the Qsolve documentation
-(Build a workflow, "SDK reference"), and every `qsolve` command and flag is in "The qsolve command
-line" there.
+with signatures, parameters and examples, is in the SDK reference of the
+[Qsolve documentation](https://qsolve.omlabs.co/docs/build/overview) (Build a workflow, "SDK
+reference"), and every `qsolve` command and flag is in "The qsolve command line" there.
 
 ## Documentation
 
-- The Qsolve documentation, section "Build a workflow": the guided tutorial, the SDK reference and the
-  CLI reference
+- [The Qsolve documentation](https://qsolve.omlabs.co/docs/build/overview), section "Build a
+  workflow": the guided tutorial, the SDK reference and the CLI reference
 - [Writing a workflow](docs/writing-a-workflow.md)
 - [The contract](docs/workflow-contract.md)
 - [Design: the SDK as the bridge](docs/design/sdk-as-bridge.md)

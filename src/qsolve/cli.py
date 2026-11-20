@@ -123,6 +123,11 @@ qsolve test .       # the same gates the Qsolve platform runs
 solution is scored. `qsolve.yaml` declares the methods and says in plain words what each one is.
 Qsolve runs every declared method, re-evaluates each answer, and measures the quantum run from the
 circuits it sends. Edit `benchmarks/cases.yaml` to define the cases the platform will benchmark.
+
+## License
+
+Apache-2.0 (the `LICENSE` file), the same as the SDK. Replace it if you prefer another open-source
+license; Qsolve workflows are public, open-source repositories.
 """
 
 
