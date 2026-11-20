@@ -93,9 +93,13 @@ def init(
     (dest / "README.md").write_text(readme, encoding="utf-8")
     console.print(f"[green]Created[/green] {escape(str(dest))}")
     console.print(
-        f"Next: cd {escape(name)} && qsolve test .   (edit src/workflow.py: it is plain Qiskit)"
+        f"Next: cd {escape(name)} && qsolve check .   (edit src/workflow.py: it is plain Qiskit)"
     )
+    console.print(f"Docs: {_DOCS}   (coding agents: {_LLMS})")
 
+
+_DOCS = "https://qsolve.omlabs.co/docs/build/overview"
+_LLMS = "https://qsolve.omlabs.co/llms.txt"
 
 _TEST_TEMPLATE = """import json
 from pathlib import Path
@@ -114,10 +118,15 @@ def test_example_matches_the_best_classical_answer() -> None:
 _README_TAIL = """## Develop
 
 ```
-qsolve validate .   # check the manifest, schemas and example inputs
-qsolve run . -i examples/qubo_5.json
-qsolve test .       # the same gates the Qsolve platform runs
+qsolve run . -i examples/qubo_5.json   # try it on the CPU simulator
+qsolve check .      # validate + lint + test: the three stages the Qsolve platform runs
 ```
+
+`qsolve check` stops at the first failing stage; `qsolve validate`, `qsolve lint` and `qsolve test`
+run one stage each. Before you edit the schemas, read the
+[schema rules](https://qsolve.omlabs.co/docs/build/schemas) (draft-07, no `pattern`, local `$ref`
+only). Docs: [Build a workflow](https://qsolve.omlabs.co/docs/build/overview); for coding agents,
+[llms.txt](https://qsolve.omlabs.co/llms.txt) lists every page as plain markdown.
 
 `src/workflow.py` is plain Qiskit: the problem, the quantum method, the classical methods and how a
 solution is scored. `qsolve.yaml` declares the methods and says in plain words what each one is.
@@ -239,7 +248,8 @@ def test(
     target: Annotated[str, typer.Option(help=_TARGET_HELP)] = "sim-cpu",
     out: Annotated[Path | None, typer.Option(help="Write the JSON report here")] = None,
 ) -> None:
-    """Run the validation gates and benchmark cases (the same ones the platform runs)."""
+    """Run the validation gates and benchmark cases (the platform's test stage). `qsolve check`
+    also runs validate and lint first."""
     try:
         report = run_benchmarks(workflow, target)
     except (FileNotFoundError, ValidationError, ValueError) as e:
@@ -273,6 +283,27 @@ def test(
         out.write_text(report.model_dump_json(indent=2), encoding="utf-8")
     console.print("[green]ALL GATES PASSED[/green]" if report.passed else "[red]FAILED[/red]")
     raise typer.Exit(0 if report.passed else 1)
+
+
+@app.command()
+def check(
+    workflow: Annotated[Path, typer.Argument(help="Workflow directory")] = Path("."),
+    target: Annotated[str, typer.Option(help=_TARGET_HELP)] = "sim-cpu",
+) -> None:
+    """validate, lint and test in the order the platform runs them; stops at the first failure."""
+    for label, step, args in (
+        ("validate", validate, (workflow,)),
+        ("lint", lint, (workflow,)),
+        ("test", test, (workflow, target, None)),
+    ):
+        console.print(f"[bold]== qsolve {label}[/bold]")
+        try:
+            step(*args)
+        except typer.Exit as e:
+            if e.exit_code:
+                console.print(f"[red]Stopped: qsolve {label} failed.[/red]")
+                raise
+    console.print("[green]All three stages passed: ready to submit on Qsolve.[/green]")
 
 
 if __name__ == "__main__":

@@ -59,6 +59,3 @@ resources:
   memory_mb: 2048
   network: none
 
-runtime:
-  python: "3.12"
-  dependencies: requirements.lock

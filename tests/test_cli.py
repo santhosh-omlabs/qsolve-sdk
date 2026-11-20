@@ -27,6 +27,8 @@ def test_init_writes_a_complete_workflow(scaffold: Path) -> None:
         assert (scaffold / name).is_file(), name
     assert "my-problem" in (scaffold / "qsolve.yaml").read_text(encoding="utf-8")
     assert "__NAME__" not in (scaffold / "qsolve.yaml").read_text(encoding="utf-8")
+    # runtime.python and runtime.dependencies are informational defaults: not written
+    assert "runtime:" not in (scaffold / "qsolve.yaml").read_text(encoding="utf-8")
 
 
 def test_scaffold_lints_clean_and_ships_the_sdk_license(scaffold: Path) -> None:
@@ -51,6 +53,26 @@ def test_init_never_overwrites_an_existing_folder(tmp_path: Path) -> None:
     result = runner.invoke(app, ["init", "taken", "--directory", str(tmp_path)])
     # Rich wraps long paths at the terminal width, so compare with whitespace collapsed
     assert result.exit_code == 1 and "already exists" in " ".join(result.output.split())
+
+
+def test_check_runs_the_stages_in_order_and_stops_at_the_first_failure(
+    scaffold: Path, tmp_path: Path
+) -> None:
+    broken = tmp_path / "broken"
+    broken.mkdir()
+    result = runner.invoke(app, ["check", str(broken)])
+    out = " ".join(result.output.split())
+    assert result.exit_code == 1 and "== qsolve validate" in out
+    assert "== qsolve lint" not in out and "qsolve validate failed" in out
+    ok = runner.invoke(app, ["check", str(scaffold)])
+    text = " ".join(ok.output.split())
+    assert ok.exit_code == 0, ok.output
+    assert (
+        text.index("== qsolve validate")
+        < text.index("== qsolve lint")
+        < text.index("== qsolve test")
+    )
+    assert "ready to submit" in text
 
 
 def test_the_scaffold_validates_and_lints_clean(scaffold: Path) -> None:

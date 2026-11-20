@@ -7,8 +7,9 @@ the best classical method. [Documentation](https://qsolve.omlabs.co/docs/build/o
 You write a workflow in plain Qiskit: your circuits, your algorithm, your error mitigation, your
 classical references. This SDK runs it on Qsolve's backends (CPU, GPU, QPU), records every circuit it
 sends and every count it gets back, runs every method you declare, re-evaluates the answers, measures
-the quantum run and validates the lot. If a workflow passes `qsolve test` on your laptop, it passes
-validation on the platform, because the platform runs this same code in its sandbox. (The sandbox
+the quantum run and validates the lot. If a workflow passes `qsolve check` on your laptop, it passes
+validation on the platform, because the platform runs the same three stages (validate, lint, test)
+with this same code in its sandbox. (The sandbox
 has no network and a fixed set of importable modules; `qsolve lint` tells you what it will refuse,
 and [the contract](docs/workflow-contract.md) lists the platform rules.)
 
@@ -39,11 +40,13 @@ qsolve lint .                              # secrets and imports the sandbox wou
 qsolve run . -i examples/qubo_5.json       # run on the CPU simulator
 qsolve estimate . -i examples/qubo_5.json  # circuits and shots to expect, no execution
 qsolve test .                              # the validation gates and benchmark cases
+qsolve check .                             # validate + lint + test: the full pre-submission check
 ```
 
-Every command exits non-zero on failure, so `qsolve validate . && qsolve lint . && qsolve test .`
-is a complete pre-submission check. The scaffold is a working QAOA workflow that passes every gate;
-change it step by step and re-run `qsolve test .` after each step.
+`qsolve test` does not run lint, and the platform does, so use `qsolve check .` before you submit: it
+runs the three stages in the platform's order and stops at the first failure. Every command exits
+non-zero on failure. The scaffold is a working QAOA workflow that passes every gate; change it step
+by step and re-run `qsolve check .` after each step.
 
 `src/workflow.py` is the whole workflow:
 
@@ -111,6 +114,8 @@ reference"), and every `qsolve` command and flag is in "The qsolve command line"
 
 - [The Qsolve documentation](https://qsolve.omlabs.co/docs/build/overview), section "Build a
   workflow": the guided tutorial, the SDK reference and the CLI reference
+- [llms.txt](https://qsolve.omlabs.co/llms.txt): every documentation page as plain markdown, for
+  coding agents and tools that read documentation
 - [Writing a workflow](docs/writing-a-workflow.md)
 - [The contract](docs/workflow-contract.md)
 - [Design: the SDK as the bridge](docs/design/sdk-as-bridge.md)
