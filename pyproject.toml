@@ -5,6 +5,7 @@ description = "SDK for building reusable quantum and hybrid workflows on the Qso
 readme = "README.md"
 license = "Apache-2.0"
 license-files = ["LICENSE"]
+authors = [{ name = "Santhosh Reddy", email = "santhosh@omlabs.co" }]
 requires-python = ">=3.12"
 keywords = ["quantum", "qiskit", "workflow", "quantum-computing", "benchmark", "error-mitigation"]
 classifiers = [
