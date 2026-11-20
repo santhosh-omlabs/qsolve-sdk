@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 - 2026-11-20
+
+- `qsolve check`: validate, lint and test in the order the platform runs them, stopping at the
+  first failing stage. `qsolve test` alone does not run lint, which the platform does.
+- `qsolve init`: the scaffold no longer writes the informational `runtime` block (`python`,
+  `dependencies`: both defaults, neither read), prints the documentation and `llms.txt` links, and
+  its README points to the schema rules.
+- The `fidelity_checked` gate failure says `fake:fez@1.6` needs no token and runs on the CPU.
+
 ## 1.0.0 - 2026-11-20
 
 First public release. The SDK is the bridge between a Qiskit workflow and the Qsolve platform. It

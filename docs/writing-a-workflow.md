@@ -8,7 +8,7 @@ A workflow is a Qiskit program with a manifest. This guide builds one from the s
 ```bash
 qsolve init warehouse-picker --summary "Pick which depots to open"
 cd warehouse-picker
-qsolve test .          # it already passes every gate
+qsolve check .         # validate, lint and test: it already passes every stage
 ```
 
 The scaffold solves a small QUBO with QAOA in about 120 lines of Qiskit. Read `src/workflow.py` first.
@@ -63,7 +63,7 @@ standard (chemical accuracy, say).
   the results join the track record. Needs `qpu: [ibm]` under `targets`.
 
 ```bash
-qsolve validate . && qsolve lint . && qsolve test .
+qsolve check .   # validate, lint and test, stopping at the first failure
 ```
 
 Push to a public repository and submit it on the [Qsolve platform](https://qsolve.omlabs.co).

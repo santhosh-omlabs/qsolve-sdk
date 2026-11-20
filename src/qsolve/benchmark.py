@@ -334,7 +334,8 @@ def run_benchmarks(workflow_dir: str | Path, target: str = "sim-cpu") -> Benchma
             detail="a case sets min_fidelity on a noisy target"
             if noisy
             else "no case sets expect.min_fidelity on a noisy target (`target: fake:fez@1.6`): "
-            "mitigation is never validated where noise acts",
+            "mitigation is never validated where noise acts. No token needed: fake:fez@1.6 is "
+            "Qiskit Aer on your CPU with IBM Fez's noise model",
         )
     )
     gates.append(

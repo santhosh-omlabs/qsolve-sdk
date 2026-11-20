@@ -1,6 +1,6 @@
 [project]
 name = "qsolve-sdk"
-version = "1.0.0"
+version = "1.1.0"
 description = "SDK for building reusable quantum and hybrid workflows on the Qsolve platform"
 readme = "README.md"
 license = "Apache-2.0"

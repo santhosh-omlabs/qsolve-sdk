@@ -199,9 +199,9 @@ def test_a_fidelity_bound_on_an_ideal_simulator_does_not_validate_mitigation(
     case = {"name": "x", "input_file": "examples/qubo_5.json", "seed": 1,
             "expect": {"max_gap": 0.0, "min_fidelity": 0.1}}  # fmt: skip
     gates = {g.name: g for g in run_benchmarks(_scaffold_with_cases(tmp_path, [case])).gates}
-    assert (
-        not gates["fidelity_checked"].passed and "noisy target" in gates["fidelity_checked"].detail
-    )
+    detail = gates["fidelity_checked"].detail
+    assert not gates["fidelity_checked"].passed and "noisy target" in detail
+    assert "No token needed" in detail  # a developer with no IBM account must know the way out
 
 
 def test_a_failing_rerun_is_a_failed_gate_not_a_crashed_report(
