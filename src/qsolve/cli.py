@@ -124,8 +124,8 @@ qsolve check .      # validate + lint + test: the three stages the Qsolve platfo
 
 `qsolve check` stops at the first failing stage; `qsolve validate`, `qsolve lint` and `qsolve test`
 run one stage each. Before you edit the schemas, read the
-[schema rules](https://qsolve.omlabs.co/docs/build/schemas) (draft-07, no `pattern`, local `$ref`
-only). Docs: [Build a workflow](https://qsolve.omlabs.co/docs/build/overview); for coding agents,
+[schema rules](https://qsolve.omlabs.co/docs/build/input-and-output-schemas) (draft-07, no
+`pattern`, local `$ref` only). Docs: [Build a workflow](https://qsolve.omlabs.co/docs/build/overview); for coding agents,
 [llms.txt](https://qsolve.omlabs.co/llms.txt) lists every page as plain markdown.
 
 `src/workflow.py` is plain Qiskit: the problem, the quantum method, the classical methods and how a
